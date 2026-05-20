@@ -1,1 +1,297 @@
-/* Phase 2에서 작성 예정 */
+/* ═══════════════════════════════════════════════
+   MyheroGuide — style.css
+   ═══════════════════════════════════════════════ */
+
+/* ── Reset ─────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+ul, ol { list-style: none; }
+button { background: none; border: none; cursor: pointer; color: inherit; }
+img { display: block; max-width: 100%; }
+
+/* ── Variables ──────────────────────────────────── */
+:root {
+  --bg:           #07070d;
+  --bg-card:      #0d0d18;
+  --bg-card-over: #131326;
+  --border:       rgba(255, 255, 255, 0.055);
+  --text:         #e6e2d8;
+  --text-sub:     rgba(230, 226, 216, 0.42);
+  --gold:         #c8922a;
+  --gold-dim:     rgba(200, 146, 42, 0.18);
+  --bar-h:        54px;
+  --f-display:    'Black Han Sans', sans-serif;
+  --f-body:       'Noto Sans KR', sans-serif;
+  --f-logo:       'Cinzel', serif;
+
+  /* Class accent colors — set via data-class attr */
+  --c-warrior: #d94f4f;
+  --c-hunter:  #45b96b;
+  --c-mage:    #4f8fe0;
+  --c-priest:  #d4a827;
+  --c-rogue:   #9b5fd4;
+}
+
+/* ── Base ───────────────────────────────────────── */
+body {
+  font-family: var(--f-body);
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Subtle grain texture */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ── App Shell ──────────────────────────────────── */
+#app {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Screen Slide System ────────────────────────── */
+#screen-wrap {
+  display: flex;
+  width: 200vw;
+  height: 100vh;
+  transform: translateX(0);
+  transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+#screen-wrap.slide-left {
+  transform: translateX(-100vw);
+}
+
+.screen {
+  width: 100vw;
+  min-width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Top Bar ────────────────────────────────────── */
+.top-bar {
+  height: var(--bar-h);
+  min-height: var(--bar-h);
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+  background: rgba(7, 7, 13, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+
+/* Gold gradient accent line at bottom of top bar */
+.top-bar::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--gold) 0%, transparent 55%);
+  opacity: 0.5;
+}
+
+.logo {
+  font-family: var(--f-logo);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.top-hint {
+  font-size: 0.65rem;
+  font-weight: 300;
+  color: var(--text-sub);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* ── Back Button ────────────────────────────────── */
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 0;
+  font-family: var(--f-display);
+  font-size: 0.95rem;
+  color: var(--text);
+  transition: color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.back-btn:active { color: var(--gold); }
+
+/* ── Card List ──────────────────────────────────── */
+.card-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.card-list.scrollable {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+.card-list.scrollable::-webkit-scrollbar { display: none; }
+
+/* ── Card ───────────────────────────────────────── */
+.card {
+  display: flex;
+  align-items: stretch;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.12s;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+/* Class cards: evenly divide remaining height */
+#class-list .card {
+  flex: 1;
+}
+
+/* Weapon cards: fixed height */
+#weapon-list .card {
+  min-height: 76px;
+  flex: none;
+}
+
+/* Left accent strip */
+.card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--card-accent, var(--gold));
+  opacity: 0;
+  transition: opacity 0.18s;
+}
+
+.card:hover  { background: var(--bg-card-over); }
+.card:active { background: var(--bg-card-over); }
+.card:hover::before,
+.card:active::before { opacity: 1; }
+
+/* ── Card Image Wrap ────────────────────────────── */
+.card-img-wrap {
+  width: 70px;
+  min-width: 70px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  align-self: stretch;
+}
+
+.card-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Fade image into background */
+.card-img-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 40%, var(--bg-card) 100%);
+  transition: background 0.12s;
+}
+
+.card:hover .card-img-wrap::after,
+.card:active .card-img-wrap::after {
+  background: linear-gradient(90deg, transparent 40%, var(--bg-card-over) 100%);
+}
+
+/* ── Card Body ──────────────────────────────────── */
+.card-body {
+  flex: 1;
+  padding: 0 12px 0 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+}
+
+.card-name {
+  font-family: var(--f-display);
+  font-size: clamp(1.15rem, 5vw, 1.7rem);
+  line-height: 1.05;
+  color: var(--text);
+  letter-spacing: 0.01em;
+}
+
+.card-sub {
+  font-size: 0.65rem;
+  font-weight: 300;
+  color: var(--text-sub);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ── Card Chevron ───────────────────────────────── */
+.card-chevron {
+  padding: 0 18px 0 8px;
+  display: flex;
+  align-items: center;
+  color: var(--text-sub);
+  flex-shrink: 0;
+  transition: color 0.15s, transform 0.15s;
+}
+
+.card-chevron svg { display: block; }
+
+.card:hover .card-chevron,
+.card:active .card-chevron {
+  color: var(--card-accent, var(--gold));
+  transform: translateX(3px);
+}
+
+/* ── Class-specific accent colors ───────────────── */
+[data-class="전사"] { --card-accent: var(--c-warrior); }
+[data-class="헌터"] { --card-accent: var(--c-hunter);  }
+[data-class="법사"] { --card-accent: var(--c-mage);    }
+[data-class="사제"] { --card-accent: var(--c-priest);  }
+[data-class="도적"] { --card-accent: var(--c-rogue);   }
+
+/* ── Page Load Animation ────────────────────────── */
+@keyframes card-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+#class-list .card {
+  animation: card-rise 0.38s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+#class-list .card:nth-child(1) { animation-delay: 0.04s; }
+#class-list .card:nth-child(2) { animation-delay: 0.09s; }
+#class-list .card:nth-child(3) { animation-delay: 0.14s; }
+#class-list .card:nth-child(4) { animation-delay: 0.19s; }
+#class-list .card:nth-child(5) { animation-delay: 0.24s; }

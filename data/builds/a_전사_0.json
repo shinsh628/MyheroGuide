@@ -1,6 +1,7 @@
 {
-  "buildId": "sword_전사_0",
+  "buildId": "a_전사_0",
   "buildName": "딜특화",
+  "isMain": true,
   "status": "approved",
   "equipment": [
     {
