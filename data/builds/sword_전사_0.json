@@ -1,0 +1,125 @@
+{
+  "buildId": "sword_전사_0",
+  "buildName": "딜특화",
+  "status": "approved",
+  "equipment": [
+    {
+      "slot": "투구",
+      "equipId": "equip_001",
+      "requiredStats": ["공격력", "치명타피해"],
+      "requiredOptions": [
+        { "name": "화염작열", "minLevel": 5, "priority": 1 }
+      ]
+    },
+    {
+      "slot": "망토",
+      "equipId": "equip_002",
+      "requiredStats": ["치명타율", "스킬 피해"],
+      "requiredOptions": [
+        { "name": "빙결파열", "minLevel": 3, "priority": 1 }
+      ]
+    },
+    {
+      "slot": "상의",
+      "equipId": "equip_003",
+      "requiredStats": ["공격력", "방어력"],
+      "requiredOptions": [
+        { "name": "번개강타", "minLevel": 4, "priority": 1 }
+      ]
+    },
+    {
+      "slot": "목걸이",
+      "equipId": "equip_004",
+      "requiredStats": ["치명타피해", "치명타율"],
+      "requiredOptions": []
+    },
+    {
+      "slot": "반지",
+      "equipId": "equip_005",
+      "requiredStats": ["공격력", "스킬 피해"],
+      "requiredOptions": []
+    },
+    {
+      "slot": "신발",
+      "equipId": "equip_006",
+      "requiredStats": ["공격력", "치명타피해"],
+      "requiredOptions": [
+        { "name": "화염작열", "minLevel": 3, "priority": 1 }
+      ]
+    }
+  ],
+  "weapon": {
+    "classWeapon": {
+      "statPriority": ["공격력", "치명타피해", "치명타율"]
+    },
+    "limitedWeapons": [
+      {
+        "weaponId": "lw_001",
+        "statPriority": ["공격력", "치명타피해", "치명타율", "각성: 화염"]
+      },
+      {
+        "weaponId": "lw_002",
+        "statPriority": ["공격력", "스킬 피해", "치명타율", "각성: 화염"]
+      }
+    ]
+  },
+  "rune": [
+    { "slot": "투구",   "core": "코어: 화염", "crystal": "결정: 공격" },
+    { "slot": "망토",   "core": "코어: 빙결", "crystal": "결정: 공격" },
+    { "slot": "상의",   "core": "코어: 화염", "crystal": "결정: 방어" },
+    { "slot": "목걸이", "core": "코어: 번개", "crystal": "결정: 공격" },
+    { "slot": "반지",   "core": "코어: 화염", "crystal": "결정: 속도" },
+    { "slot": "신발",   "core": "코어: 대지", "crystal": "결정: 속도" }
+  ],
+  "skill": { "image": "" },
+  "card": {
+    "weapon": [
+      { "cardId": "card_w_001", "mainStatPriority": ["주속성: 공격력"], "subStatPriority": ["보조속성: 스킬 피해"] },
+      { "cardId": "card_w_002", "mainStatPriority": ["주속성: 치명타"], "subStatPriority": ["보조속성: 방어 관통"] },
+      { "cardId": null }
+    ],
+    "armor": [
+      { "cardId": "card_a_001", "mainStatPriority": ["주속성: 공격력"], "subStatPriority": ["보조속성: 스킬 피해"] },
+      { "cardId": "card_a_002", "mainStatPriority": ["주속성: 치명타"], "subStatPriority": ["보조속성: 방어 관통"] },
+      { "cardId": null },
+      { "cardId": null }
+    ],
+    "accessory": [
+      { "cardId": "card_c_001", "mainStatPriority": ["주속성: 공격력"], "subStatPriority": ["보조속성: 스킬 피해"] },
+      { "cardId": null }
+    ]
+  },
+  "doll": { "image": "" },
+  "astrology": ["as_001", "as_002", "as_003"],
+  "spell": ["sp_001", "sp_002", "sp_003"],
+  "pet": {
+    "attack":  "pa_001",
+    "special": "ps_001",
+    "dash":    "pd_001",
+    "potion":  "pp_001"
+  },
+  "gem": {
+    "subStatPriority":  ["보조: 공격력", "보조: 치명타피해", "보조: 체력"],
+    "rareStatPriority": ["희귀: 보스 피해", "희귀: 스킬 피해"]
+  },
+  "soulPower": {
+    "burstSkills": [
+      { "skillId": "bs_001", "priority": 1 },
+      { "skillId": "bs_002", "priority": 2 },
+      { "skillId": "bs_003", "priority": 3 }
+    ],
+    "stats": [
+      { "name": "공격력",    "note": "최우선" },
+      { "name": "보스 피해", "note": "두 번째" },
+      { "name": "치명타율",  "note": "여유되면" },
+      { "name": "스킬 피해", "note": "" },
+      { "name": "방어 관통", "note": "" }
+    ]
+  },
+  "marble": {
+    "main":   "m_001",
+    "class":  "m_002",
+    "soul":   "m_003",
+    "normal": ["m_004", "m_005", "m_006", "m_007", "m_008", "m_009"]
+  }
+}
