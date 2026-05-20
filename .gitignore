@@ -1,2 +1,6 @@
 # Local Netlify folder
 .netlify
+
+# 대용량 로컬 전용 폴더
+appbase/
+img/extracted/
