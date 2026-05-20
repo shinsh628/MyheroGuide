@@ -4,3 +4,11 @@
 # 대용량 로컬 전용 폴더
 appbase/
 img/extracted/
+
+# 내부 문서
+CLAUDE.md
+game-guide-spec.md
+handover.md
+docs/
+progress/
+*.py
