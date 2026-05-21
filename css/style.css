@@ -626,6 +626,92 @@ body::after {
 }
 .soul-stat-note { font-size: 10px; color: var(--main); }
 
+/* ── 스킬 그리드 (2×2, 픽셀퍼펙트 4배) ─────────────── */
+.skill-grid-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 28vh;
+}
+.skill-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 128px);
+  grid-template-rows: repeat(2, 128px);
+  gap: 6px;
+}
+.skill-grid-img {
+  width: 128px;
+  height: 128px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  display: block;
+}
+.skill-grid-empty {
+  background: rgba(255,255,255,0.06);
+}
+
+/* ── 카드 탭 ─────────────────────────────────────── */
+.card-px-img {
+  width: 94px;
+  height: 94px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  display: block;
+  flex-shrink: 0;
+}
+.card-px-empty {
+  background: rgba(255,255,255,0.06);
+  border-radius: 4px;
+}
+.card-stat-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: center;
+}
+
+/* 무기: 가로 3분할, 이미지 위 + 속성 아래 */
+.card-weapon-row {
+  display: flex;
+  gap: 8px;
+}
+.card-weapon-cell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.card-weapon-cell .card-stat-block {
+  align-items: center;
+}
+
+/* 방어구: 2×2 그리드, 이미지 왼쪽 + 속성 오른쪽 */
+.card-armor-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+/* 장신구: 가로 2분할, 이미지 왼쪽 + 속성 오른쪽 */
+.card-accessory-row {
+  display: flex;
+  gap: 8px;
+}
+.card-accessory-row .card-side-cell {
+  flex: 1;
+}
+
+/* 방어구·장신구 공통 셀 */
+.card-side-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.card-empty-cell {
+  opacity: 0.4;
+}
+
 /* ── Image-only Panel (스킬/인형) ────────────────── */
 .img-only-panel { width: 100%; }
 .img-only-panel img { width: 100%; border-radius: 8px; display: block; }

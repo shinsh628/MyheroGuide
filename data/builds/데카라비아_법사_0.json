@@ -34,14 +34,24 @@
     { "corePriority": ["원소에너지", "치명타피해"], "crystalPriority": ["공격", "방어관통"] }
   ],
 
-  "skill": {
-    "image": ""
-  },
+  "skill": { "ids": ["sk_107040", "sk_302330", "sk_401210", "sk_402290"] },
 
   "card": {
-    "weapon":    [],
-    "armor":     [],
-    "accessory": []
+    "weapon": [
+      { "cardId": "card_3567", "mainStatPriority": ["공격"],    "subStatPriority": ["치명타피해"] },
+      { "cardId": "card_3574", "mainStatPriority": ["공격"],    "subStatPriority": ["치명타피해"] },
+      { "cardId": "card_3577", "mainStatPriority": ["공격"],    "subStatPriority": ["치명타피해"] }
+    ],
+    "armor": [
+      { "cardId": "card_3579", "mainStatPriority": ["공격%"],   "subStatPriority": ["원소공격"] },
+      { "cardId": "card_3585", "mainStatPriority": ["공격%"],   "subStatPriority": ["원소공격"] },
+      { "cardId": "card_3532", "mainStatPriority": ["공격%"],   "subStatPriority": ["원소공격"] },
+      { "cardId": null }
+    ],
+    "accessory": [
+      { "cardId": "card_3543", "mainStatPriority": ["원소관통"], "subStatPriority": ["치명타피해"] },
+      { "cardId": "card_3581", "mainStatPriority": ["원소관통"], "subStatPriority": ["치명타피해"] }
+    ]
   },
 
   "doll": {

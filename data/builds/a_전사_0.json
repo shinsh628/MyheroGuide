@@ -72,7 +72,7 @@
     { "slot": "반지",   "core": "코어: 화염", "crystal": "결정: 속도" },
     { "slot": "신발",   "core": "코어: 대지", "crystal": "결정: 속도" }
   ],
-  "skill": { "image": "" },
+  "skill": { "ids": ["sk_107040", "sk_302330", "sk_401210", "sk_402290"] },
   "card": {
     "weapon": [
       { "cardId": "card_w_001", "mainStatPriority": ["주속성: 공격력"], "subStatPriority": ["보조속성: 스킬 피해"] },

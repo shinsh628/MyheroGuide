@@ -165,37 +165,76 @@ function renderRune(rune, runeColor = 'green') {
   </div>`;
 }
 
+function renderSkill(skill) {
+  const ids = skill?.ids ?? [];
+  if (!ids.length) return `<div class="img-only-empty">스킬 이미지 없음</div>`;
+  const imgs = ids.slice(0, 4).map(id => {
+    const s = byId(DB.skills, id);
+    return s?.image
+      ? `<img class="skill-grid-img" src="${s.image}" alt="">`
+      : `<div class="skill-grid-img skill-grid-empty"></div>`;
+  }).join('');
+  return `<div class="skill-grid-wrap"><div class="skill-grid">${imgs}</div></div>`;
+}
+
 function renderImageOnly(data, label) {
   if (!data?.image) return `<div class="img-only-empty">${label} 이미지 없음</div>`;
   return `<div class="img-only-panel"><img src="${data.image}" alt="${label}"></div>`;
 }
 
+function cardImg(image) {
+  return image
+    ? `<img class="card-px-img" src="${image}" alt="">`
+    : `<div class="card-px-img card-px-empty"></div>`;
+}
+
+function cardStats(slot) {
+  return `<div class="card-stat-block">
+    ${slot.mainStatPriority.map(tagStat).join('')}
+    ${slot.subStatPriority.map(s => `<span class="tag-opt">${s}</span>`).join('')}
+  </div>`;
+}
+
 function renderCard(card) {
-  const SECTIONS = [
-    { key: 'weapon',    label: '무기 카드',   pool: DB.cards.weapon    },
-    { key: 'armor',     label: '방어구 카드', pool: DB.cards.armor     },
-    { key: 'accessory', label: '장신구 카드', pool: DB.cards.accessory },
-  ];
-  return SECTIONS.map(({ key, label, pool }) => {
-    const rows = (card[key] || []).map(slot => {
-      if (!slot.cardId) return `<tr>
-        <td class="tbl-img-cell"><div class="item-thumb-placeholder"></div><span class="tbl-slot-lbl">미장착</span></td>
-        <td class="tbl-body-cell"><div class="tbl-item-name tbl-item-empty">—</div></td>
-      </tr>`;
-      const c = byId(pool, slot.cardId);
-      return `<tr>
-        <td class="tbl-img-cell">${thumb(c?.image)}<span class="tbl-slot-lbl">코스트 ${c?.cost ?? '?'}</span></td>
-        <td class="tbl-body-cell">
-          <div class="tbl-item-name">${c?.name ?? '???'}</div>
-          <div class="tag-row">
-            ${slot.mainStatPriority.map(tagStat).join('')}
-            ${slot.subStatPriority.map(s => `<span class="tag-opt">${s}</span>`).join('')}
-          </div>
-        </td>
-      </tr>`;
-    }).join('');
-    return section(label, `<table class="item-tbl">${rows}</table>`);
-  }).join('');
+  // ── 무기: 가로 3분할, 이미지 위 + 속성 아래
+  const weaponHtml = `<div class="card-weapon-row">
+    ${(card.weapon || []).map(slot => {
+      if (!slot.cardId) return `<div class="card-weapon-cell card-empty-cell"><div class="card-px-img card-px-empty"></div></div>`;
+      const c = byId(DB.cards, slot.cardId);
+      return `<div class="card-weapon-cell">
+        ${cardImg(c?.image)}
+        ${cardStats(slot)}
+      </div>`;
+    }).join('')}
+  </div>`;
+
+  // ── 방어구: 2×2 그리드, 이미지 왼쪽 + 속성 오른쪽
+  const armorHtml = `<div class="card-armor-grid">
+    ${(card.armor || []).map(slot => {
+      if (!slot.cardId) return `<div class="card-side-cell card-empty-cell"><div class="card-px-img card-px-empty"></div></div>`;
+      const c = byId(DB.cards, slot.cardId);
+      return `<div class="card-side-cell">
+        ${cardImg(c?.image)}
+        ${cardStats(slot)}
+      </div>`;
+    }).join('')}
+  </div>`;
+
+  // ── 장신구: 가로 2분할, 이미지 왼쪽 + 속성 오른쪽
+  const accessoryHtml = `<div class="card-accessory-row">
+    ${(card.accessory || []).map(slot => {
+      if (!slot.cardId) return `<div class="card-side-cell card-empty-cell"><div class="card-px-img card-px-empty"></div></div>`;
+      const c = byId(DB.cards, slot.cardId);
+      return `<div class="card-side-cell">
+        ${cardImg(c?.image)}
+        ${cardStats(slot)}
+      </div>`;
+    }).join('')}
+  </div>`;
+
+  return section('무기 카드', weaponHtml)
+       + section('방어구 카드', armorHtml)
+       + section('장신구 카드', accessoryHtml);
 }
 
 function renderAstrology(astrology) {
@@ -300,7 +339,7 @@ function renderPanel(key, build) {
     case 'equipment': return renderEquipment(build.equipment);
     case 'weapon':    return renderWeapon(build.weapon);
     case 'rune':      return renderRune(build.rune, build.runeColor);
-    case 'skill':     return renderImageOnly(build.skill, '스킬');
+    case 'skill':     return renderSkill(build.skill);
     case 'card':      return renderCard(build.card);
     case 'doll':      return renderImageOnly(build.doll, '인형');
     case 'astrology': return renderAstrology(build.astrology);
