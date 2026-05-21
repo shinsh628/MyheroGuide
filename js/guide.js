@@ -403,7 +403,7 @@ function switchTab(key) {
     p.classList.toggle('active', p.dataset.panel === key)
   );
   document.querySelector(`.tab-chip[data-tab="${key}"]`)
-    ?.scrollIntoView({ inline: 'center', behavior: 'smooth' });
+    ?.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
 }
 
 function switchBuild(buildId) {
