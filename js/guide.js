@@ -251,7 +251,7 @@ function renderAstrology(astrology) {
         ${icon}
         <div class="astro-info">
           <div class="astro-name">${a?.name ?? '???'}</div>
-          <div class="astro-desc">${a?.desc ?? ''}</div>
+          <div class="astro-desc">${a?.desc?.[i] ?? ''}</div>
         </div>
       </div>
     </div>`;
