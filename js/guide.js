@@ -125,15 +125,15 @@ function renderRune(rune, runeColor = 'green') {
 
   const col = RUNE_COLORS[runeColor] ?? RUNE_COLORS.green;
 
-  // flat-top hexagon: CX=250, CY=250, R=160
+  // flat-top hexagon: CX=250, CY=250, R=130
   // vertex order: right, upper-right, upper-left, left, lower-left, lower-right
   const VERTS = [
-    [366, 226],
-    [286,  87],
-    [126,  87],
-    [ 46, 226],
-    [126, 365],
-    [286, 365],
+    [336, 226],
+    [271, 113],
+    [141, 113],
+    [ 76, 226],
+    [141, 339],
+    [271, 339],
   ];
 
   const labels = VERTS.map(([lx, ly], i) => {
@@ -153,7 +153,7 @@ function renderRune(rune, runeColor = 'green') {
       <div class="rune-hex-group" id="rune-hex-group">
         <svg class="rune-hex-svg" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
           <polygon class="rune-hex-shape"
-            points="410,250 330,388.6 170,388.6 90,250 170,111.4 330,111.4"/>
+            points="380,250 315,362.6 185,362.6 120,250 185,137.4 315,137.4"/>
         </svg>
         ${labels}
       </div>
