@@ -1,0 +1,59 @@
+{
+  "buildId": "데카라비아_법사_0",
+  "buildName": "test빌드",
+  "isMain": true,
+  "status": "approved",
+
+  "equipment": [],
+
+  "weapon": {
+    "classWeapon": {
+      "statPriority": []
+    },
+    "limitedWeapons": []
+  },
+
+  "rune": [],
+
+  "skill": {
+    "image": ""
+  },
+
+  "card": {
+    "weapon":    [],
+    "armor":     [],
+    "accessory": []
+  },
+
+  "doll": {
+    "image": ""
+  },
+
+  "astrology": [],
+
+  "spell": [],
+
+  "pet": {
+    "attack":  null,
+    "special": null,
+    "dash":    null,
+    "potion":  null
+  },
+
+  "gem": {
+    "subStatPriority":  [],
+    "rareStatPriority": []
+  },
+
+  "soulPower": {
+    "burstSkills": [],
+    "stats":       []
+  },
+
+  "marble": {
+    "main":   null,
+    "class":  null,
+    "soul":   null,
+    "normal": []
+  }
+}

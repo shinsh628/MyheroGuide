@@ -2,12 +2,43 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>공략 — MyheroGuide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@300;400;700&family=Cinzel:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <p>준비 중 — guide</p>
+  <div id="app" class="guide-app">
+
+    <header class="guide-header">
+
+      <!-- Row 1: Context bar -->
+      <div id="ctx-bar" class="guide-ctx-bar">
+        <div class="ctx-left">
+          <a href="index.html" class="ctx-back" aria-label="뒤로">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <span id="ctx-class-dot"   class="ctx-class-dot"></span>
+          <span id="ctx-class-label" class="ctx-class-label"></span>
+          <span class="ctx-sep">·</span>
+          <span id="ctx-weapon-label" class="ctx-weapon-label"></span>
+        </div>
+        <select id="ctx-build-select" class="ctx-build-select" aria-label="빌드 선택"></select>
+      </div>
+
+      <!-- Row 2: Tab bar -->
+      <nav id="tab-bar" class="guide-tab-bar" aria-label="탭 목록"></nav>
+
+    </header>
+
+    <main id="guide-content" class="guide-content"></main>
+
+  </div>
   <script type="module" src="js/guide.js"></script>
 </body>
 </html>

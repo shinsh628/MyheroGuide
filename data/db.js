@@ -25,24 +25,12 @@ export const DB = {
   optionPool: ["화염작열", "빙결파열", "번개강타", "대지진동"],
 
   // ── 직업무기 ──────────────────────────────────────────────
-  // 전사: a b c d  /  헌터: e f g h  /  법사: i j k  /  사제: l m n  /  도적: o p
-  classWeapons: [
-    { id: "cw_001", weaponType: "a", class: "전사", name: "임시무기-a", image: "img/weapon/a.png" },
-    { id: "cw_002", weaponType: "b", class: "전사", name: "임시무기-b", image: "img/weapon/b.png" },
-    { id: "cw_003", weaponType: "c", class: "전사", name: "임시무기-c", image: "img/weapon/c.png" },
-    { id: "cw_004", weaponType: "d", class: "전사", name: "임시무기-d", image: "img/weapon/d.png" },
-    { id: "cw_005", weaponType: "e", class: "헌터", name: "임시무기-e", image: "img/weapon/e.png" },
-    { id: "cw_006", weaponType: "f", class: "헌터", name: "임시무기-f", image: "img/weapon/f.png" },
-    { id: "cw_007", weaponType: "g", class: "헌터", name: "임시무기-g", image: "img/weapon/g.png" },
-    { id: "cw_008", weaponType: "h", class: "헌터", name: "임시무기-h", image: "img/weapon/h.png" },
-    { id: "cw_009", weaponType: "i", class: "법사", name: "임시무기-i", image: "img/weapon/i.png" },
-    { id: "cw_010", weaponType: "j", class: "법사", name: "임시무기-j", image: "img/weapon/j.png" },
-    { id: "cw_011", weaponType: "k", class: "법사", name: "임시무기-k", image: "img/weapon/k.png" },
-    { id: "cw_012", weaponType: "l", class: "사제", name: "임시무기-l", image: "img/weapon/l.png" },
-    { id: "cw_013", weaponType: "m", class: "사제", name: "임시무기-m", image: "img/weapon/m.png" },
-    { id: "cw_014", weaponType: "n", class: "사제", name: "임시무기-n", image: "img/weapon/n.png" },
-    { id: "cw_015", weaponType: "o", class: "도적", name: "임시무기-o", image: "img/weapon/o.png" },
-    { id: "cw_016", weaponType: "p", class: "도적", name: "임시무기-p", image: "img/weapon/p.png" },
+  // 전 직업 공통 무기 4종
+  weapons: [
+    { id: "w_001", weaponType: "상관",     name: "상관",     image: "img/weapon/상관.png" },
+    { id: "w_002", weaponType: "데카라비아", name: "데카라비아", image: "img/weapon/데카라비아.png" },
+    { id: "w_003", weaponType: "강동이교",  name: "강동이교",  image: "img/weapon/강동이교.png" },
+    { id: "w_004", weaponType: "보니",     name: "보니",     image: "img/weapon/보니.png" },
   ],
 
   // ── 한정무기 ──────────────────────────────────────────────

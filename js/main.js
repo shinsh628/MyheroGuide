@@ -40,7 +40,7 @@ function renderClassList() {
 
 // ── Render: Weapon List ──────────────────────────
 function renderWeaponList(className) {
-  const weapons = DB.classWeapons.filter(w => w.class === className);
+  const weapons = DB.weapons;
 
   weaponList.innerHTML = weapons.map(w => `
     <li class="card" data-weapon="${w.weaponType}" role="button" tabindex="0"
@@ -50,7 +50,6 @@ function renderWeaponList(className) {
       </div>
       <div class="card-body">
         <span class="card-name">${w.name}</span>
-        <span class="card-sub">${w.weaponType}</span>
       </div>
       <span class="card-chevron" aria-hidden="true">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -90,7 +89,7 @@ function selectWeapon(weaponType) {
     class:  selectedClass,
     weapon: weaponType,
   });
-  window.location.href = `guide.html?${params}`;
+  window.location.href = `guide?${params}`;
 }
 
 // ── Init ─────────────────────────────────────────

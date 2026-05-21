@@ -1,1 +1,358 @@
-// 공략 페이지 렌더링 — Phase 2에서 작성 예정
+import { DB } from '../data/db.js';
+
+const TAB_KEYS   = ['equipment','weapon','rune','skill','card','doll','astrology','spell','pet','gem','soulPower','marble','galaxy'];
+const TAB_LABELS = ['장비','무기','룬','스킬','카드','인형','점성술','주문','펫','보석','소울파워','구슬','은하장비'];
+
+const params      = new URLSearchParams(location.search);
+const cls         = params.get('class')  || '';
+const weaponType  = params.get('weapon') || '';
+const initBuildId = params.get('build');
+
+let builds       = [];
+let currentBuild = null;
+let currentTab   = TAB_KEYS[0];
+
+// ── Helpers ──────────────────────────────────────
+
+const byId = (arr, id) => arr?.find(x => x.id === id) ?? null;
+
+const thumb = src =>
+  src ? `<img class="item-thumb" src="${src}" alt="" loading="lazy">`
+      : `<div class="item-thumb-placeholder"></div>`;
+
+const weaponImg = src =>
+  src ? `<img class="weapon-card-img" src="${src}" alt="" loading="lazy">`
+      : `<div class="weapon-card-img-placeholder"></div>`;
+
+const tagStat = s  => `<span class="tag-stat">${s}</span>`;
+const tagOpt  = (name, lv) =>
+  `<span class="tag-opt">${name}${lv ? ` <span class="tag-opt-lv">lv${lv}↑</span>` : ''}</span>`;
+const tagRare = s  => `<span class="tag-rare">${s}</span>`;
+
+const priNum  = (n, rare = false) =>
+  `<span class="priority-num${rare ? ' rare' : ''}">${n}</span>`;
+
+const section = (title, html) =>
+  `<div class="tab-section"><div class="tab-section-title">${title}</div>${html}</div>`;
+
+const emptyMsg = () => `<p class="empty-msg">데이터 없음</p>`;
+
+// ── Build discovery ──────────────────────────────
+
+async function discoverBuilds() {
+  const found = [];
+  for (let i = 0; i < 30; i++) {
+    let res;
+    try { res = await fetch(`data/builds/${weaponType}_${cls}_${i}.json`); }
+    catch { break; }
+    if (!res.ok) break;
+    const data = await res.json().catch(() => null);
+    if (data?.status === 'approved') found.push(data);
+  }
+  return found;
+}
+
+// ── Tab renderers ────────────────────────────────
+
+function renderEquipment(equip) {
+  if (!equip?.length) return emptyMsg();
+  return `<table class="item-tbl">${equip.map(slot => {
+    const e = byId(DB.equipment, slot.equipId);
+    return `<tr>
+      <td class="tbl-img-cell">${thumb(e?.image)}<span class="tbl-slot-lbl">${slot.slot}</span></td>
+      <td class="tbl-body-cell">
+        <div class="tbl-item-name">${e?.name ?? '???'}</div>
+        <div class="tag-row">
+          ${slot.requiredStats.map(tagStat).join('')}
+          ${slot.requiredOptions.map(o => tagOpt(o.name, o.minLevel)).join('')}
+        </div>
+      </td>
+    </tr>`;
+  }).join('')}</table>`;
+}
+
+function renderWeapon(w) {
+  const cw = DB.weapons.find(x => x.weaponType === weaponType);
+
+  const cwCard = `<div class="weapon-card">
+    ${weaponImg(cw?.image)}
+    <div class="weapon-card-body">
+      <div class="weapon-card-name">${cw?.name ?? cls + ' 직업무기'}</div>
+      <div class="priority-list">${w.classWeapon.statPriority.map((s, i) =>
+        `<div class="priority-item">${priNum(i + 1)} ${s}</div>`
+      ).join('')}</div>
+    </div>
+  </div>`;
+
+  const lwCards = w.limitedWeapons.map(lw => {
+    const d = byId(DB.limitedWeapons, lw.weaponId);
+    return `<div class="weapon-card">
+      ${weaponImg(d?.image)}
+      <div class="weapon-card-body">
+        <div class="weapon-card-name">${d?.name ?? '???'}</div>
+        <div class="priority-list">${lw.statPriority.map((s, i) => {
+          const isAscend = s.startsWith('각성');
+          return `<div class="priority-item">${priNum(isAscend ? '각' : i + 1, isAscend)} ${s}</div>`;
+        }).join('')}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  return section('직업무기', cwCard) + section('한정무기 (추천 2종)', lwCards);
+}
+
+function renderRune(rune) {
+  if (!rune?.length) return emptyMsg();
+  return `<table class="item-tbl">${rune.map(slot => `
+    <tr>
+      <td class="tbl-img-cell"><div class="item-thumb-placeholder"></div><span class="tbl-slot-lbl">${slot.slot}</span></td>
+      <td class="tbl-body-cell">
+        <div class="tag-row">
+          ${tagStat(slot.core)}
+          ${tagOpt(slot.crystal)}
+        </div>
+      </td>
+    </tr>
+  `).join('')}</table>`;
+}
+
+function renderImageOnly(data, label) {
+  if (!data?.image) return `<div class="img-only-empty">${label} 이미지 없음</div>`;
+  return `<div class="img-only-panel"><img src="${data.image}" alt="${label}"></div>`;
+}
+
+function renderCard(card) {
+  const SECTIONS = [
+    { key: 'weapon',    label: '무기 카드',   pool: DB.cards.weapon    },
+    { key: 'armor',     label: '방어구 카드', pool: DB.cards.armor     },
+    { key: 'accessory', label: '장신구 카드', pool: DB.cards.accessory },
+  ];
+  return SECTIONS.map(({ key, label, pool }) => {
+    const rows = (card[key] || []).map(slot => {
+      if (!slot.cardId) return `<tr>
+        <td class="tbl-img-cell"><div class="item-thumb-placeholder"></div><span class="tbl-slot-lbl">미장착</span></td>
+        <td class="tbl-body-cell"><div class="tbl-item-name tbl-item-empty">—</div></td>
+      </tr>`;
+      const c = byId(pool, slot.cardId);
+      return `<tr>
+        <td class="tbl-img-cell">${thumb(c?.image)}<span class="tbl-slot-lbl">코스트 ${c?.cost ?? '?'}</span></td>
+        <td class="tbl-body-cell">
+          <div class="tbl-item-name">${c?.name ?? '???'}</div>
+          <div class="tag-row">
+            ${slot.mainStatPriority.map(tagStat).join('')}
+            ${slot.subStatPriority.map(s => `<span class="tag-opt">${s}</span>`).join('')}
+          </div>
+        </td>
+      </tr>`;
+    }).join('');
+    return section(label, `<table class="item-tbl">${rows}</table>`);
+  }).join('');
+}
+
+function renderAstrology(astrology) {
+  if (!astrology?.length) return emptyMsg();
+  return `<table class="item-tbl">${astrology.map((id, i) => {
+    const a = byId(DB.astrology, id);
+    return `<tr>
+      <td class="tbl-img-cell">${thumb(a?.image)}<span class="tbl-slot-lbl">${i + 1}번</span></td>
+      <td class="tbl-body-cell"><div class="tbl-item-name">${a?.name ?? '???'}</div></td>
+    </tr>`;
+  }).join('')}</table>`;
+}
+
+function renderSpell(spell) {
+  if (!spell?.length) return emptyMsg();
+  return `<table class="item-tbl">${spell.map((id, i) => {
+    const s = byId(DB.spells, id);
+    return `<tr>
+      <td class="tbl-img-cell"><div class="item-thumb-placeholder"></div><span class="tbl-slot-lbl">${i + 1}번</span></td>
+      <td class="tbl-body-cell"><div class="tbl-item-name">${s?.name ?? '???'}</div></td>
+    </tr>`;
+  }).join('')}</table>`;
+}
+
+function renderPet(pet) {
+  if (!pet) return emptyMsg();
+  const SLOTS = [
+    { key: 'attack',  label: '공격', pool: DB.pets.attack  },
+    { key: 'special', label: '오의', pool: DB.pets.special },
+    { key: 'dash',    label: '질주', pool: DB.pets.dash    },
+    { key: 'potion',  label: '포션', pool: DB.pets.potion  },
+  ];
+  return `<table class="item-tbl">${SLOTS.map(s => {
+    const p = byId(s.pool, pet[s.key]);
+    return `<tr>
+      <td class="tbl-img-cell">${thumb(p?.image)}<span class="tbl-slot-lbl">${s.label}</span></td>
+      <td class="tbl-body-cell"><div class="tbl-item-name">${p?.name ?? '???'}</div></td>
+    </tr>`;
+  }).join('')}</table>`;
+}
+
+function renderGem(gem) {
+  if (!gem) return emptyMsg();
+  const sub  = gem.subStatPriority.map((s, i) =>
+    `<div class="priority-item">${priNum(i + 1)} ${s}</div>`).join('');
+  const rare = gem.rareStatPriority.map((s, i) =>
+    `<div class="priority-item">${priNum(i + 1, true)} ${s}</div>`).join('');
+  return section('보조속성 우선순위', `<div class="priority-list">${sub}</div>`)
+       + section('희귀속성 우선순위', `<div class="priority-list">${rare}</div>`);
+}
+
+function renderSoulPower(soul) {
+  if (!soul) return emptyMsg();
+  const burstRows = soul.burstSkills.map(bs => {
+    const sk = byId(DB.burstSkills, bs.skillId);
+    return `<tr>
+      <td class="tbl-img-cell">${thumb(sk?.image)}<span class="tbl-slot-lbl">${bs.priority}순위</span></td>
+      <td class="tbl-body-cell"><div class="tbl-item-name">${sk?.name ?? '???'}</div></td>
+    </tr>`;
+  }).join('');
+  const statRows = soul.stats.map((s, i) =>
+    `<div class="priority-item">${priNum(i + 1)} <span class="priority-text">${s.name}</span>${s.note ? `<span class="soul-stat-note">${s.note}</span>` : ''}</div>`
+  ).join('');
+  return section('버스트 스킬 우선순위', `<table class="item-tbl">${burstRows}</table>`)
+       + section('소울파워 속성', `<div class="priority-list">${statRows}</div>`);
+}
+
+function renderMarble(marble) {
+  if (!marble) return emptyMsg();
+  const SPECIAL = [
+    { key: 'main',  label: '메인' },
+    { key: 'class', label: '직업' },
+    { key: 'soul',  label: '소울' },
+  ];
+  const specialHtml = `<div class="marble-special-row">${SPECIAL.map(s => {
+    const m = byId(DB.marbles, marble[s.key]);
+    const img = m?.image
+      ? `<img class="marble-special-img" src="${m.image}" alt="">`
+      : `<div class="marble-special-img-placeholder"></div>`;
+    return `<div class="marble-special-card">
+      <span class="marble-special-type">${s.label}</span>
+      ${img}
+      <span class="marble-special-name">${m?.name ?? '???'}</span>
+    </div>`;
+  }).join('')}</div>`;
+
+  const normalHtml = `<div class="marble-normal-grid">${marble.normal.map(id => {
+    const m = byId(DB.marbles, id);
+    const img = m?.image
+      ? `<img class="marble-normal-img" src="${m.image}" alt="">`
+      : `<div class="marble-normal-img-placeholder"></div>`;
+    return `<div class="marble-normal-item">${img}<span class="marble-normal-name">${m?.name ?? '???'}</span></div>`;
+  }).join('')}</div>`;
+
+  return section('특수 슬롯', specialHtml) + section('일반 슬롯', normalHtml);
+}
+
+// ── Panel router ─────────────────────────────────
+
+function renderPanel(key, build) {
+  switch (key) {
+    case 'equipment': return renderEquipment(build.equipment);
+    case 'weapon':    return renderWeapon(build.weapon);
+    case 'rune':      return renderRune(build.rune);
+    case 'skill':     return renderImageOnly(build.skill, '스킬');
+    case 'card':      return renderCard(build.card);
+    case 'doll':      return renderImageOnly(build.doll, '인형');
+    case 'astrology': return renderAstrology(build.astrology);
+    case 'spell':     return renderSpell(build.spell);
+    case 'pet':       return renderPet(build.pet);
+    case 'gem':       return renderGem(build.gem);
+    case 'soulPower': return renderSoulPower(build.soulPower);
+    case 'marble':    return renderMarble(build.marble);
+    case 'galaxy':    return emptyMsg();
+    default:          return '';
+  }
+}
+
+// ── DOM updates ──────────────────────────────────
+
+function updateCtxBar() {
+  const ctxBar = document.getElementById('ctx-bar');
+  ctxBar.dataset.class = cls;
+
+  const w = DB.weapons.find(x => x.weaponType === weaponType);
+  document.getElementById('ctx-class-label').textContent  = cls;
+  document.getElementById('ctx-weapon-label').textContent = w?.name ?? weaponType;
+
+  const sel = document.getElementById('ctx-build-select');
+  sel.innerHTML = builds.map(b =>
+    `<option value="${b.buildId}">${b.buildName}</option>`
+  ).join('');
+  sel.value    = currentBuild?.buildId ?? '';
+  sel.disabled = builds.length <= 1;
+  sel.onchange = () => switchBuild(sel.value);
+}
+
+function updateTabBar() {
+  const bar = document.getElementById('tab-bar');
+  bar.innerHTML = TAB_KEYS.map((key, i) =>
+    `<button class="tab-chip${key === currentTab ? ' active' : ''}"
+             data-tab="${key}"
+             aria-label="${TAB_LABELS[i]}">
+      <img class="tab-icon" src="img/tab/${TAB_LABELS[i]}.png" alt="${TAB_LABELS[i]}">
+    </button>`
+  ).join('');
+  bar.querySelectorAll('.tab-chip:not(.disabled)').forEach(btn =>
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab))
+  );
+}
+
+function updateContent() {
+  const content = document.getElementById('guide-content');
+  content.innerHTML = TAB_KEYS.map(key =>
+    `<div class="tab-panel${key === currentTab ? ' active' : ''}" data-panel="${key}">
+      ${renderPanel(key, currentBuild)}
+    </div>`
+  ).join('');
+}
+
+// ── Actions ──────────────────────────────────────
+
+function switchTab(key) {
+  currentTab = key;
+  document.querySelectorAll('.tab-chip').forEach(c =>
+    c.classList.toggle('active', c.dataset.tab === key)
+  );
+  document.querySelectorAll('.tab-panel').forEach(p =>
+    p.classList.toggle('active', p.dataset.panel === key)
+  );
+  document.querySelector(`.tab-chip[data-tab="${key}"]`)
+    ?.scrollIntoView({ inline: 'center', behavior: 'smooth' });
+}
+
+function switchBuild(buildId) {
+  currentBuild = builds.find(b => b.buildId === buildId) ?? currentBuild;
+  history.pushState({}, '', `?class=${encodeURIComponent(cls)}&weapon=${encodeURIComponent(weaponType)}&build=${encodeURIComponent(buildId)}`);
+  updateContent();
+}
+
+// ── Init ─────────────────────────────────────────
+
+async function init() {
+  if (!cls || !weaponType) {
+    document.getElementById('guide-content').innerHTML =
+      '<div class="coming-soon">직업과 무기를 선택해주세요</div>';
+    return;
+  }
+
+  updateCtxBar();
+  updateTabBar();
+
+  builds = await discoverBuilds();
+
+  if (!builds.length) {
+    document.getElementById('guide-content').innerHTML =
+      '<div class="coming-soon">공략 데이터가 없습니다</div>';
+    return;
+  }
+
+  currentBuild = builds.find(b => b.buildId === initBuildId)
+              ?? builds.find(b => b.isMain)
+              ?? builds[0];
+
+  updateCtxBar();
+  updateContent();
+}
+
+init();

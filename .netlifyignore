@@ -1,8 +1,26 @@
+# ── Git / local tool metadata ─────────────────────
 .git
 .serena
+.superpowers
+.netlify
+
+# ── Large asset libraries (절대 배포 금지) ─────────
+appbase
+img/모음
+img/extracted
+img/extracted2
+
+# ── Staging / temp ────────────────────────────────
+img/temp
+temp
+
+# ── Processing scripts ────────────────────────────
+*.py
+img/미분류_목록.txt
+
+# ── Internal documents ────────────────────────────
+CLAUDE.md
+game-guide-spec.md
+handover.md
 docs
 progress
-handover.md
-game-guide-spec.md
-appbase
-img/extracted

@@ -1,14 +1,26 @@
-# Local Netlify folder
-.netlify
+# ── Netlify local cache ──────────────────────────
+.netlify/
 
-# 대용량 로컬 전용 폴더
+# ── AI tool folders (local only) ─────────────────
+.serena/
+.superpowers/
+
+# ── Large local-only asset libraries ─────────────
 appbase/
-img/extracted/
+img/모음/
+img/extracted*/
 
-# 내부 문서
+# ── Staging / temp folders ────────────────────────
+img/temp/
+temp/
+
+# ── Processing scripts ────────────────────────────
+*.py
+img/미분류_목록.txt
+
+# ── Internal documents ────────────────────────────
 CLAUDE.md
 game-guide-spec.md
 handover.md
 docs/
 progress/
-*.py

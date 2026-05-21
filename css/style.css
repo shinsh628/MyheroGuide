@@ -11,25 +11,26 @@ img { display: block; max-width: 100%; }
 
 /* ── Variables ──────────────────────────────────── */
 :root {
-  --bg:           #07070d;
-  --bg-card:      #0d0d18;
-  --bg-card-over: #131326;
-  --border:       rgba(255, 255, 255, 0.055);
-  --text:         #e6e2d8;
-  --text-sub:     rgba(230, 226, 216, 0.42);
-  --gold:         #c8922a;
-  --gold-dim:     rgba(200, 146, 42, 0.18);
+  --bg:           #07080F;
+  --bg-card:      #0D1018;
+  --bg-card-over: #131B24;
+  --border:       rgba(255, 255, 255, 0.07);
+  --text:         #E2E8F0;
+  --text-sub:     rgba(180, 200, 220, 0.45);
+  --main:         #00C2A8;
+  --main-dim:     rgba(0, 194, 168, 0.15);
+  --sub:          #FF7043;
   --bar-h:        54px;
   --f-display:    'Black Han Sans', sans-serif;
   --f-body:       'Noto Sans KR', sans-serif;
-  --f-logo:       'Cinzel', serif;
+  --f-logo:       'Black Han Sans', sans-serif;
 
-  /* Class accent colors — set via data-class attr */
-  --c-warrior: #d94f4f;
-  --c-hunter:  #45b96b;
-  --c-mage:    #4f8fe0;
-  --c-priest:  #d4a827;
-  --c-rogue:   #9b5fd4;
+  /* Class accent colors */
+  --c-warrior: #FF4757;
+  --c-hunter:  #23D160;
+  --c-mage:    #339AF0;
+  --c-priest:  #FFB300;
+  --c-rogue:   #CC5DE8;
 }
 
 /* ── Base ───────────────────────────────────────── */
@@ -91,7 +92,7 @@ body::after {
   justify-content: space-between;
   position: relative;
   z-index: 1;
-  background: rgba(7, 7, 13, 0.96);
+  background: rgba(7, 8, 15, 0.96);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
@@ -105,17 +106,16 @@ body::after {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, var(--gold) 0%, transparent 55%);
-  opacity: 0.5;
+  background: linear-gradient(90deg, var(--main) 0%, transparent 60%);
+  opacity: 0.6;
 }
 
 .logo {
   font-family: var(--f-logo);
   font-size: 1rem;
   font-weight: 700;
-  color: var(--gold);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  color: var(--main);
+  letter-spacing: 0.04em;
   line-height: 1;
 }
 
@@ -140,7 +140,7 @@ body::after {
   -webkit-tap-highlight-color: transparent;
 }
 
-.back-btn:active { color: var(--gold); }
+.back-btn:active { color: var(--main); }
 
 /* ── Card List ──────────────────────────────────── */
 .card-list {
@@ -161,6 +161,7 @@ body::after {
 .card {
   display: flex;
   align-items: stretch;
+  height: 80px;
   background: var(--bg-card);
   border-bottom: 1px solid var(--border);
   cursor: pointer;
@@ -190,7 +191,7 @@ body::after {
   top: 0;
   bottom: 0;
   width: 3px;
-  background: var(--card-accent, var(--gold));
+  background: var(--card-accent, var(--main));
   opacity: 0;
   transition: opacity 0.18s;
 }
@@ -202,8 +203,7 @@ body::after {
 
 /* ── Card Image Wrap ────────────────────────────── */
 .card-img-wrap {
-  width: 70px;
-  min-width: 70px;
+  width: auto;
   position: relative;
   overflow: hidden;
   flex-shrink: 0;
@@ -211,9 +211,9 @@ body::after {
 }
 
 .card-img-wrap img {
-  width: 100%;
   height: 100%;
-  object-fit: cover;
+  width: auto;
+  display: block;
 }
 
 /* Fade image into background */
@@ -270,7 +270,7 @@ body::after {
 
 .card:hover .card-chevron,
 .card:active .card-chevron {
-  color: var(--card-accent, var(--gold));
+  color: var(--card-accent, var(--main));
   transform: translateX(3px);
 }
 
@@ -280,6 +280,364 @@ body::after {
 [data-class="법사"] { --card-accent: var(--c-mage);    }
 [data-class="사제"] { --card-accent: var(--c-priest);  }
 [data-class="도적"] { --card-accent: var(--c-rogue);   }
+
+/* ═══════════════════════════════════════════════
+   GUIDE PAGE
+   ═══════════════════════════════════════════════ */
+
+/* ── Guide App Shell ────────────────────────────── */
+.guide-app {
+  display: flex;
+  flex-direction: column;
+}
+
+.guide-header {
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+/* ── Context Bar (Row 1) ────────────────────────── */
+.guide-ctx-bar {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  background: rgba(7, 7, 13, 0.98);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+
+.guide-ctx-bar::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, var(--ctx-accent, var(--main)) 0%, transparent 50%);
+}
+
+/* Class accent on ctx-bar */
+[data-class="전사"] { --ctx-accent: var(--c-warrior); }
+[data-class="헌터"] { --ctx-accent: var(--c-hunter);  }
+[data-class="법사"] { --ctx-accent: var(--c-mage);    }
+[data-class="사제"] { --ctx-accent: var(--c-priest);  }
+[data-class="도적"] { --ctx-accent: var(--c-rogue);   }
+
+.ctx-left { display: flex; align-items: center; gap: 8px; }
+
+.ctx-back {
+  display: flex;
+  align-items: center;
+  color: var(--text-sub);
+  padding: 4px;
+  margin-left: -4px;
+  transition: color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.ctx-back:hover { color: var(--text); }
+
+.ctx-class-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--ctx-accent, var(--main));
+  flex-shrink: 0;
+}
+
+.ctx-class-label  { font-size: 13px; font-weight: 700; }
+.ctx-sep          { color: var(--border); font-size: 12px; }
+.ctx-weapon-label { font-size: 12px; color: var(--text-sub); }
+
+.ctx-build-select {
+  background: rgba(0, 194, 168, 0.08);
+  border: 1px solid rgba(0, 194, 168, 0.3);
+  border-radius: 5px;
+  color: var(--main);
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--f-body);
+  padding: 5px 22px 5px 8px;
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2300C2A8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 7px center;
+}
+.ctx-build-select:disabled { opacity: 0.5; cursor: default; }
+.ctx-build-select option { background: #0D1018; color: var(--text); }
+
+/* ── Tab Bar (Row 2) ────────────────────────────── */
+.guide-tab-bar {
+  height: 36px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 0 10px;
+  background: rgba(7, 7, 13, 0.95);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.guide-tab-bar::-webkit-scrollbar { display: none; }
+
+.tab-chip {
+  flex-shrink: 0;
+  width: 36px;
+  height: 30px;
+  padding: 0;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  background: none;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.tab-chip.active {
+  background: var(--main-dim);
+  border-color: rgba(0, 194, 168, 0.35);
+}
+.tab-chip.disabled { opacity: 0.25; cursor: default; }
+
+.tab-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  opacity: 0.4;
+  transition: opacity 0.15s;
+  display: block;
+}
+.tab-chip.active .tab-icon  { opacity: 1; filter: drop-shadow(0 0 4px rgba(0,194,168,0.5)); }
+.tab-chip:not(.disabled):hover .tab-icon { opacity: 0.75; }
+
+/* ── Guide Content Area ─────────────────────────── */
+.guide-content {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.tab-panel {
+  display: none;
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: 12px;
+}
+.tab-panel::-webkit-scrollbar { width: 3px; }
+.tab-panel::-webkit-scrollbar-track { background: transparent; }
+.tab-panel::-webkit-scrollbar-thumb { background: rgba(0, 194, 168, 0.2); border-radius: 2px; }
+.tab-panel.active { display: block; }
+
+/* ── Section Header (within tab) ───────────────── */
+.tab-section { margin-bottom: 16px; }
+.tab-section-title {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-sub);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+
+/* ── Item Table (shared) ────────────────────────── */
+.item-tbl { width: 100%; border-collapse: collapse; }
+.item-tbl tr { border-bottom: 1px solid var(--border); }
+.item-tbl tr:last-child { border-bottom: none; }
+
+.tbl-img-cell {
+  width: 54px;
+  padding: 10px 6px;
+  text-align: center;
+  vertical-align: middle;
+}
+.item-thumb, .item-thumb-placeholder {
+  width: 40px; height: 40px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  display: block;
+  margin: 0 auto 3px;
+}
+.item-thumb         { object-fit: cover; background: var(--bg-card); }
+.item-thumb-placeholder { background: var(--bg-card); }
+.tbl-slot-lbl { font-size: 8px; color: var(--text-sub); display: block; }
+
+.tbl-body-cell { padding: 10px 6px 10px 2px; vertical-align: middle; }
+.tbl-item-name { font-size: 12px; font-weight: 700; margin-bottom: 5px; }
+.tbl-item-empty { color: var(--text-sub); }
+
+/* ── Tags ───────────────────────────────────────── */
+.tag-row { display: flex; flex-wrap: wrap; gap: 3px; }
+
+.tag-stat {
+  background: rgba(0, 194, 168, 0.08);
+  border: 1px solid rgba(0, 194, 168, 0.25);
+  border-radius: 3px;
+  padding: 1px 6px;
+  font-size: 9px;
+  color: var(--main);
+}
+.tag-opt {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  padding: 1px 6px;
+  font-size: 9px;
+  color: var(--text-sub);
+}
+.tag-opt-lv { color: rgba(0, 194, 168, 0.7); }
+
+.tag-rare {
+  background: rgba(155, 95, 212, 0.08);
+  border: 1px solid rgba(155, 95, 212, 0.25);
+  border-radius: 3px;
+  padding: 1px 6px;
+  font-size: 9px;
+  color: #9b5fd4;
+}
+
+/* ── Weapon Card ────────────────────────────────── */
+.weapon-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.weapon-card:last-child { margin-bottom: 0; }
+
+.weapon-card-img, .weapon-card-img-placeholder {
+  width: 48px; height: 48px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.weapon-card-img         { object-fit: cover; background: var(--bg-card-over); }
+.weapon-card-img-placeholder { background: var(--bg-card-over); }
+
+.weapon-card-body { flex: 1; min-width: 0; }
+.weapon-card-name { font-size: 12px; font-weight: 700; margin-bottom: 7px; }
+
+/* ── Priority List ──────────────────────────────── */
+.priority-list { display: flex; flex-direction: column; gap: 5px; }
+
+.priority-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-sub);
+}
+.priority-text { flex: 1; }
+.priority-num {
+  width: 17px; height: 17px;
+  border-radius: 3px;
+  background: var(--main-dim);
+  border: 1px solid rgba(0, 194, 168, 0.3);
+  color: var(--main);
+  font-size: 9px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.priority-num.rare {
+  background: rgba(155, 95, 212, 0.12);
+  border-color: rgba(155, 95, 212, 0.3);
+  color: #9b5fd4;
+}
+.soul-stat-note { font-size: 10px; color: var(--main); }
+
+/* ── Image-only Panel (스킬/인형) ────────────────── */
+.img-only-panel { width: 100%; }
+.img-only-panel img { width: 100%; border-radius: 8px; display: block; }
+.img-only-empty {
+  width: 100%;
+  min-height: 180px;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-sub);
+  font-size: 13px;
+}
+
+/* ── Marble Tab ─────────────────────────────────── */
+.marble-special-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 0;
+}
+.marble-special-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+}
+.marble-special-type { font-size: 8px; color: var(--text-sub); }
+.marble-special-img, .marble-special-img-placeholder {
+  width: 36px; height: 36px;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+}
+.marble-special-img         { object-fit: cover; background: var(--bg-card-over); }
+.marble-special-img-placeholder { background: var(--bg-card-over); }
+.marble-special-name { font-size: 10px; font-weight: 700; }
+
+.marble-normal-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+.marble-normal-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 5px 7px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.marble-normal-img, .marble-normal-img-placeholder {
+  width: 24px; height: 24px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.marble-normal-img         { object-fit: cover; background: var(--bg-card-over); }
+.marble-normal-img-placeholder { background: var(--bg-card-over); }
+.marble-normal-name { font-size: 9px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ── Misc ───────────────────────────────────────── */
+.empty-msg {
+  color: var(--text-sub);
+  font-size: 13px;
+  padding: 20px 4px;
+}
+.coming-soon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: var(--text-sub);
+  font-size: 14px;
+}
 
 /* ── Page Load Animation ────────────────────────── */
 @keyframes card-rise {
