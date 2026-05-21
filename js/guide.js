@@ -260,20 +260,17 @@ function renderSpell(spell) {
 }
 
 function renderPet(pet) {
-  if (!pet) return emptyMsg();
-  const SLOTS = [
-    { key: 'attack',  label: '공격', pool: DB.pets.attack  },
-    { key: 'special', label: '오의', pool: DB.pets.special },
-    { key: 'dash',    label: '질주', pool: DB.pets.dash    },
-    { key: 'potion',  label: '포션', pool: DB.pets.potion  },
-  ];
-  return `<table class="item-tbl">${SLOTS.map(s => {
-    const p = byId(s.pool, pet[s.key]);
-    return `<tr>
-      <td class="tbl-img-cell">${thumb(p?.image)}<span class="tbl-slot-lbl">${s.label}</span></td>
-      <td class="tbl-body-cell"><div class="tbl-item-name">${p?.name ?? '???'}</div></td>
-    </tr>`;
-  }).join('')}</table>`;
+  const ids = pet?.ids ?? [];
+  if (!ids.length) return emptyMsg();
+  const imgs = ids.map(id => {
+    const p = byId(DB.pets, id);
+    return `<div class="pet-cell">${
+      p?.image
+        ? `<img class="pet-img" src="${p.image}" alt="">`
+        : `<div class="pet-img pet-img-empty"></div>`
+    }</div>`;
+  }).join('');
+  return `<div class="pet-row-wrap"><div class="pet-row">${imgs}</div></div>`;
 }
 
 function renderGem(gem) {

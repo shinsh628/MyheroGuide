@@ -55,7 +55,7 @@
   },
 
   "doll": {
-    "image": ""
+    "image": "img/doll/스크린샷 2026-05-21 231239.png"
   },
 
   "astrology": [],
@@ -63,10 +63,7 @@
   "spell": [],
 
   "pet": {
-    "attack":  null,
-    "special": null,
-    "dash":    null,
-    "potion":  null
+    "ids": ["pet_langhun", "pet_1_20", "pet_cg_001", "pet_cg_002"]
   },
 
   "gem": {

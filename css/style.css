@@ -713,8 +713,51 @@ body::after {
 }
 
 /* ── Image-only Panel (스킬/인형) ────────────────── */
-.img-only-panel { width: 100%; }
-.img-only-panel img { width: 100%; border-radius: 8px; display: block; }
+.img-only-panel {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 12px 0;
+}
+.img-only-panel img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+  image-rendering: pixelated;
+}
+/* ── 펫 탭 ──────────────────────────────────────── */
+.pet-row-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 12vh;
+}
+.pet-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.pet-cell {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 160px;
+}
+.pet-img {
+  max-width: 160px;
+  width: auto;
+  height: auto;
+  image-rendering: pixelated;
+  display: block;
+}
+.pet-img-empty {
+  width: 60px;
+  height: 60px;
+  border: 1px dashed var(--border);
+  border-radius: 6px;
+}
+
 .img-only-empty {
   width: 100%;
   min-height: 180px;
