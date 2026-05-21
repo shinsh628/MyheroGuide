@@ -14,35 +14,42 @@ export const DB = {
 
   // ── 장비 ──────────────────────────────────────────────────
   equipment: [
-    { id: "equip_001", name: "견고한 투구",   image: "", chaosSet: "혼돈의 세트A" },
-    { id: "equip_002", name: "수호자의 망토", image: "", chaosSet: "혼돈의 세트A" },
-    { id: "equip_003", name: "철갑 상의",     image: "", chaosSet: "혼돈의 세트B" },
-    { id: "equip_004", name: "용맹의 목걸이", image: "", chaosSet: "혼돈의 세트B" },
-    { id: "equip_005", name: "강철 반지",     image: "", chaosSet: "혼돈의 세트A" },
-    { id: "equip_006", name: "질풍 신발",     image: "", chaosSet: "혼돈의 세트B" },
+    { id: "equip_001", name: "불타는사령관",   image: "img/equipment/1551840.png", chaosSet: "불태우기" },
+    { id: "equip_002", name: "진홍갑옷", image: "img/equipment/1451540.png", chaosSet: "재앙의진조" },
+    { id: "equip_003", name: "깃털목걸이",     image: "img/equipment/1851540.png", chaosSet: "재앙의진조" },
+    { id: "equip_004", name: "연쇄모닥불", image: "img/equipment/1651840.png", chaosSet: "불태우기" },
+    { id: "equip_005", name: "산불",     image: "img/equipment/1751840.png", chaosSet: "불태우기" },
+    { id: "equip_006", name: "푸른창고장화",     image: "img/equipment/1951540.png", chaosSet: "재앙의진조" },
   ],
-  statPool:   ["체력", "공격력", "치명타피해", "치명타율", "방어력", "스킬 피해"],
-  optionPool: ["화염작열", "빙결파열", "번개강타", "대지진동"],
+  statPool:   ["공격", "생명", "방어", "치명타확률", "회복", "치명타피해", "원소공격", "방어관통", "전속성공격"],
+  optionPool: [
+    { id: "opt_001", image: "img/optionPool/150031.png" },
+  ],
 
   // ── 직업무기 ──────────────────────────────────────────────
   // 전 직업 공통 무기 4종
   weapons: [
-    { id: "w_001", weaponType: "상관",     name: "상관",     image: "img/weapon/상관.png" },
+    { id: "w_001", weaponType: "자간",     name: "자간",     image: "img/weapon/자간.png" },
     { id: "w_002", weaponType: "데카라비아", name: "데카라비아", image: "img/weapon/데카라비아.png" },
     { id: "w_003", weaponType: "강동이교",  name: "강동이교",  image: "img/weapon/강동이교.png" },
     { id: "w_004", weaponType: "보니",     name: "보니",     image: "img/weapon/보니.png" },
   ],
 
+  // ── 마녀무기 (빌드 무기 탭 전용) ─────────────────────────
+  witchWeapons: [
+    { id: "ww_001", name: "법사_데카라비아", image: "img/wweapon/법사_데카라비아.png" },
+  ],
+
   // ── 한정무기 ──────────────────────────────────────────────
   limitedWeapons: [
-    { id: "lw_001", name: "멸망의 검",     image: "" },
-    { id: "lw_002", name: "창조의 지팡이", image: "" },
+    { id: "lw_001", name: "사이버불", image: "img/lweapon/사이버불.png" },
+    { id: "lw_002", name: "사이버풀", image: "img/lweapon/사이버풀.png" },
   ],
-  weaponStatPool: ["공격력", "치명타피해", "치명타율", "스킬 피해", "각성: 화염"],
+  weaponStatPool: ["공격", "방어", "생명", "회복", "치명타확률", "치명타피해", "원소공격", "방어관통", "보스피해"],
 
   // ── 룬 ───────────────────────────────────────────────────
-  runeCorePool:    ["코어: 화염", "코어: 빙결", "코어: 번개", "코어: 대지"],
-  runeCrystalPool: ["결정: 공격", "결정: 방어", "결정: 속도"],
+  runeCorePool:    ["공격", "방어", "치명타피해", "치명타확률", "원소공격", "실드", "원소에너지", "방어관통", "보스피해"],
+  runeCrystalPool: ["공격", "방어", "실드", "원소공격", "원소저항", "방어관통", "실드피해", "치명타피해", "치명타확률"],
 
   // ── 카드 ─────────────────────────────────────────────────
   cards: {
@@ -58,8 +65,8 @@ export const DB = {
       { id: "card_c_001", name: "장신구 카드A", image: "", cost: 4 },
     ],
   },
-  cardMainStatPool: ["주속성: 공격력", "주속성: 치명타"],
-  cardSubStatPool:  ["보조속성: 스킬 피해", "보조속성: 방어 관통"],
+  cardMainStatPool: ["공격", "방어", "생명", "치명타확률", "치명타피해", "쿨타임", "공격%", "방어%", "생명%", "공격속도", "원소관통"],
+  cardSubStatPool:  ["공격", "방어", "생명", "원소공격", "공격속도", "에너지상한", "쿨타임", "치명타피해", "방어관통", "원소저항"],
 
   // ── 점성술 ───────────────────────────────────────────────
   astrology: [
@@ -84,8 +91,8 @@ export const DB = {
   },
 
   // ── 보석 ─────────────────────────────────────────────────
-  gemSubStatPool:  ["보조: 체력", "보조: 공격력", "보조: 치명타피해"],
-  gemRareStatPool: ["희귀: 보스 피해", "희귀: 스킬 피해"],
+  gemSubStatPool:  ["공격", "원소공격", "치명타피해", "방어관통", "원소관통"],
+  gemRareStatPool: ["공격", "치명타피해", "원소공격", "실드피해", "피해증폭", "스킬레벨", "원소제압", "억제증폭"],
 
   // ── 소울파워 ─────────────────────────────────────────────
   burstSkills: [
@@ -93,7 +100,7 @@ export const DB = {
     { id: "bs_002", name: "화염 버스트", image: "" },
     { id: "bs_003", name: "빙결 버스트", image: "" },
   ],
-  soulStatPool: ["공격력", "보스 피해", "치명타율", "스킬 피해", "방어 관통"],
+  soulStatPool: ["공격", "방어", "실드", "보스피해", "원소공격", "방어관통"],
 
   // ── 구슬 ─────────────────────────────────────────────────
   marbles: [

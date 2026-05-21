@@ -25,8 +25,13 @@ const weaponImg = src =>
       : `<div class="weapon-card-img-placeholder"></div>`;
 
 const tagStat = s  => `<span class="tag-stat">${s}</span>`;
-const tagOpt  = (name, lv) =>
+const tagOpt    = (name, lv) =>
   `<span class="tag-opt">${name}${lv ? ` <span class="tag-opt-lv">lv${lv}↑</span>` : ''}</span>`;
+
+const tagOptImg = (img, lv) =>
+  `<span class="tag-opt-img">${
+    img ? `<img src="${img}" alt="">` : `<span class="tag-opt-img-placeholder"></span>`
+  }${lv ? `<span class="tag-opt-lv">lv${lv}↑</span>` : ''}</span>`;
 const tagRare = s  => `<span class="tag-rare">${s}</span>`;
 
 const priNum  = (n, rare = false) =>
@@ -58,26 +63,34 @@ function renderEquipment(equip) {
   if (!equip?.length) return emptyMsg();
   return `<table class="item-tbl">${equip.map(slot => {
     const e = byId(DB.equipment, slot.equipId);
+    const imgHtml = e?.image
+      ? `<img class="equip-thumb" src="${e.image}" alt="" loading="lazy">`
+      : `<div class="equip-thumb-placeholder"></div>`;
+    const statsHtml = slot.requiredStats.map(s =>
+      `<div class="equip-stat-row">${tagStat(s)}</div>`
+    ).join('');
+    const optsHtml = slot.requiredOptions.map(o => {
+      const opt = byId(DB.optionPool, o.optionId);
+      return opt?.image
+        ? `<img class="equip-opt-thumb" src="${opt.image}" alt="" loading="lazy">`
+        : `<div class="equip-opt-placeholder"></div>`;
+    }).join('');
     return `<tr>
-      <td class="tbl-img-cell">${thumb(e?.image)}<span class="tbl-slot-lbl">${slot.slot}</span></td>
-      <td class="tbl-body-cell">
-        <div class="tbl-item-name">${e?.name ?? '???'}</div>
-        <div class="tag-row">
-          ${slot.requiredStats.map(tagStat).join('')}
-          ${slot.requiredOptions.map(o => tagOpt(o.name, o.minLevel)).join('')}
-        </div>
-      </td>
+      <td class="equip-img-cell">${imgHtml}<span class="tbl-slot-lbl">${slot.slot}</span></td>
+      <td class="equip-name-cell"><div class="tbl-item-name">${e?.name ?? '???'}</div></td>
+      <td class="equip-stat-cell">${statsHtml}</td>
+      <td class="equip-opt-cell"><div class="equip-opt-row">${optsHtml}</div></td>
     </tr>`;
   }).join('')}</table>`;
 }
 
 function renderWeapon(w) {
-  const cw = DB.weapons.find(x => x.weaponType === weaponType);
+  const ww = byId(DB.witchWeapons, w.classWeapon.weaponId);
 
   const cwCard = `<div class="weapon-card">
-    ${weaponImg(cw?.image)}
+    ${weaponImg(ww?.image)}
     <div class="weapon-card-body">
-      <div class="weapon-card-name">${cw?.name ?? cls + ' 직업무기'}</div>
+      <div class="weapon-card-name">${ww?.name ?? '마녀무기'}</div>
       <div class="priority-list">${w.classWeapon.statPriority.map((s, i) =>
         `<div class="priority-item">${priNum(i + 1)} ${s}</div>`
       ).join('')}</div>
@@ -98,22 +111,58 @@ function renderWeapon(w) {
     </div>`;
   }).join('');
 
-  return section('직업무기', cwCard) + section('한정무기 (추천 2종)', lwCards);
+  return section('마녀무기', cwCard) + section('한정무기 (추천 2종)', lwCards);
 }
 
-function renderRune(rune) {
+const RUNE_COLORS = {
+  green: { main: '#23D160', stroke: 'rgba(35,209,96,0.28)',   dim: 'rgba(35,209,96,0.16)'   },
+  red:   { main: '#FF4757', stroke: 'rgba(255,71,87,0.28)',   dim: 'rgba(255,71,87,0.16)'   },
+  blue:  { main: '#339AF0', stroke: 'rgba(51,154,240,0.28)',  dim: 'rgba(51,154,240,0.16)'  },
+};
+
+function renderRune(rune, runeColor = 'green') {
   if (!rune?.length) return emptyMsg();
-  return `<table class="item-tbl">${rune.map(slot => `
-    <tr>
-      <td class="tbl-img-cell"><div class="item-thumb-placeholder"></div><span class="tbl-slot-lbl">${slot.slot}</span></td>
-      <td class="tbl-body-cell">
-        <div class="tag-row">
-          ${tagStat(slot.core)}
-          ${tagOpt(slot.crystal)}
-        </div>
-      </td>
-    </tr>
-  `).join('')}</table>`;
+
+  const col = RUNE_COLORS[runeColor] ?? RUNE_COLORS.green;
+
+  // flat-top hexagon: CX=250, CY=250, R=160
+  // vertex order: right, upper-right, upper-left, left, lower-left, lower-right
+  const VERTS = [
+    [366, 226],
+    [286,  87],
+    [126,  87],
+    [ 46, 226],
+    [126, 365],
+    [286, 365],
+  ];
+
+  const labels = VERTS.map(([lx, ly], i) => {
+    const d = rune[i];
+    const coreHtml    = (d?.corePriority    ?? []).map((s, j) => `<span class="rune-pri">${j + 1}. ${s}</span>`).join('');
+    const crystalHtml = (d?.crystalPriority ?? []).map((s, j) => `<span class="rune-pri">${j + 1}. ${s}</span>`).join('');
+    return `<div class="rune-vertex-label" style="left:${lx}px;top:${ly}px">
+      <div class="rune-label-inner">
+        <div data-mode-content="core">${coreHtml}</div>
+        <div data-mode-content="crystal" hidden>${crystalHtml}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  return `<div class="rune-panel" style="--rc:${col.main};--rc-stroke:${col.stroke};--rc-dim:${col.dim}">
+    <div class="rune-hex-container">
+      <div class="rune-hex-group" id="rune-hex-group">
+        <svg class="rune-hex-svg" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+          <polygon class="rune-hex-shape"
+            points="410,250 330,388.6 170,388.6 90,250 170,111.4 330,111.4"/>
+        </svg>
+        ${labels}
+      </div>
+    </div>
+    <div class="rune-mode-toggle">
+      <button class="rune-toggle-btn active" data-mode="core">코어</button>
+      <button class="rune-toggle-btn" data-mode="crystal">크리스탈</button>
+    </div>
+  </div>`;
 }
 
 function renderImageOnly(data, label) {
@@ -250,7 +299,7 @@ function renderPanel(key, build) {
   switch (key) {
     case 'equipment': return renderEquipment(build.equipment);
     case 'weapon':    return renderWeapon(build.weapon);
-    case 'rune':      return renderRune(build.rune);
+    case 'rune':      return renderRune(build.rune, build.runeColor);
     case 'skill':     return renderImageOnly(build.skill, '스킬');
     case 'card':      return renderCard(build.card);
     case 'doll':      return renderImageOnly(build.doll, '인형');
@@ -356,3 +405,17 @@ async function init() {
 }
 
 init();
+
+document.getElementById('guide-content').addEventListener('click', e => {
+  const btn = e.target.closest('.rune-toggle-btn');
+  if (!btn || btn.classList.contains('active')) return;
+  const mode = btn.dataset.mode;
+  btn.closest('.rune-mode-toggle').querySelectorAll('.rune-toggle-btn')
+    .forEach(b => b.classList.toggle('active', b === btn));
+  const group = document.getElementById('rune-hex-group');
+  if (!group) return;
+  group.classList.toggle('rotated', mode === 'crystal');
+  group.querySelectorAll('[data-mode-content]').forEach(el => {
+    el.hidden = el.dataset.modeContent !== mode;
+  });
+});

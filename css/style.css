@@ -172,9 +172,10 @@ body::after {
   user-select: none;
 }
 
-/* Class cards: evenly divide remaining height */
+/* Class cards: 74px = 2× pixel-perfect for 95×37 dot sprites */
 #class-list .card {
-  flex: 1;
+  height: 74px;
+  flex: none;
 }
 
 /* Weapon cards: fixed height */
@@ -214,6 +215,7 @@ body::after {
   height: 100%;
   width: auto;
   display: block;
+  image-rendering: pixelated;
 }
 
 /* Fade image into background */
@@ -493,6 +495,30 @@ body::after {
 }
 .tag-opt-lv { color: rgba(0, 194, 168, 0.7); }
 
+.tag-opt-img {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  padding: 1px 4px 1px 2px;
+}
+.tag-opt-img img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  display: block;
+}
+.tag-opt-img-placeholder {
+  width: 16px;
+  height: 16px;
+  background: var(--border);
+  border-radius: 2px;
+  display: block;
+}
+
 .tag-rare {
   background: rgba(155, 95, 212, 0.08);
   border: 1px solid rgba(155, 95, 212, 0.25);
@@ -501,6 +527,49 @@ body::after {
   font-size: 9px;
   color: #9b5fd4;
 }
+
+/* ── Equipment Tab ──────────────────────────────── */
+.equip-img-cell {
+  width: 82px;
+  padding: 8px 5px;
+  text-align: center;
+  vertical-align: middle;
+}
+.equip-thumb, .equip-thumb-placeholder {
+  width: 72px; height: 72px;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  display: block;
+  margin: 0 auto 3px;
+}
+.equip-thumb             { object-fit: contain; image-rendering: pixelated; background: var(--bg-card); }
+.equip-thumb-placeholder { background: var(--bg-card); }
+
+.equip-name-cell {
+  padding: 8px 4px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.equip-stat-cell {
+  padding: 8px 4px;
+  vertical-align: middle;
+}
+.equip-stat-row { margin-bottom: 3px; }
+.equip-stat-row:last-child { margin-bottom: 0; }
+
+.equip-opt-cell {
+  padding: 8px 6px 8px 0;
+  vertical-align: middle;
+}
+.equip-opt-row { display: flex; flex-wrap: wrap; gap: 3px; }
+.equip-opt-thumb, .equip-opt-placeholder {
+  width: 48px; height: 48px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  display: block;
+}
+.equip-opt-thumb       { object-fit: contain; image-rendering: pixelated; background: var(--bg-card); }
+.equip-opt-placeholder { background: var(--bg-card); }
 
 /* ── Weapon Card ────────────────────────────────── */
 .weapon-card {
@@ -520,7 +589,7 @@ body::after {
   border: 1px solid var(--border);
   flex-shrink: 0;
 }
-.weapon-card-img         { object-fit: cover; background: var(--bg-card-over); }
+.weapon-card-img         { object-fit: contain; background: var(--bg-card-over); image-rendering: pixelated; }
 .weapon-card-img-placeholder { background: var(--bg-card-over); }
 
 .weapon-card-body { flex: 1; min-width: 0; }
@@ -623,6 +692,90 @@ body::after {
 .marble-normal-img         { object-fit: cover; background: var(--bg-card-over); }
 .marble-normal-img-placeholder { background: var(--bg-card-over); }
 .marble-normal-name { font-size: 9px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ── Rune Tab ───────────────────────────────────── */
+.rune-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 4px 0 12px;
+}
+
+.rune-hex-container {
+  position: relative;
+  width: 500px;
+  height: 500px;
+}
+
+.rune-hex-group {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.rune-hex-group.rotated { transform: rotate(90deg); }
+
+.rune-hex-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.rune-hex-shape {
+  fill: none;
+  stroke: var(--rc-stroke, rgba(0, 194, 168, 0.22));
+  stroke-width: 1.5;
+}
+.rune-center-line {
+  stroke: var(--rc-dim, rgba(0, 194, 168, 0.1));
+  stroke-width: 1;
+}
+
+.rune-vertex-label {
+  position: absolute;
+  width: 88px;
+}
+.rune-label-inner {
+  background: var(--bg-card);
+  border: 1px solid var(--rc-dim, rgba(0, 194, 168, 0.25));
+  border-radius: 6px;
+  padding: 5px 7px;
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.rune-hex-group.rotated .rune-label-inner {
+  transform: rotate(-90deg);
+}
+.rune-pri {
+  display: block;
+  font-size: 12px;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.55;
+}
+
+.rune-mode-toggle {
+  display: flex;
+  gap: 8px;
+}
+.rune-toggle-btn {
+  padding: 6px 20px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid var(--border);
+  color: var(--text-sub);
+  background: var(--bg-card);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: var(--f-body);
+}
+.rune-toggle-btn.active {
+  background: var(--rc-dim, var(--main-dim));
+  border-color: var(--rc, var(--main));
+  color: var(--rc, var(--main));
+}
 
 /* ── Misc ───────────────────────────────────────── */
 .empty-msg {

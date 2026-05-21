@@ -4,16 +4,35 @@
   "isMain": true,
   "status": "approved",
 
-  "equipment": [],
+  "equipment": [
+    { "slot": "투구",   "equipId": "equip_001", "requiredStats": ["공격", "생명", "방어"], "requiredOptions": [{ "optionId": "opt_001", "minLevel": 1 }, { "optionId": "opt_001", "minLevel": 1 }, { "optionId": "opt_001", "minLevel": 1 }] },
+    { "slot": "망토",   "equipId": "equip_005", "requiredStats": ["공격", "생명", "방어"], "requiredOptions": [{ "optionId": "opt_001", "minLevel": 1 }, { "optionId": "opt_001", "minLevel": 1 }, { "optionId": "opt_001", "minLevel": 1 }] },
+    { "slot": "상의",   "equipId": "equip_002", "requiredStats": ["공격", "생명", "방어"], "requiredOptions": [{ "optionId": "opt_001", "minLevel": 1 }, { "optionId": "opt_001", "minLevel": 1 }, { "optionId": "opt_001", "minLevel": 1 }] },
+    { "slot": "목걸이", "equipId": "equip_003", "requiredStats": ["공격", "생명", "방어"], "requiredOptions": [{ "optionId": "opt_001", "minLevel": 1 }, { "optionId": "opt_001", "minLevel": 1 }, { "optionId": "opt_001", "minLevel": 1 }] },
+    { "slot": "반지",   "equipId": "equip_004", "requiredStats": ["공격", "생명", "방어"], "requiredOptions": [{ "optionId": "opt_001", "minLevel": 1 }, { "optionId": "opt_001", "minLevel": 1 }, { "optionId": "opt_001", "minLevel": 1 }] },
+    { "slot": "신발",   "equipId": "equip_006", "requiredStats": ["공격", "생명", "방어"], "requiredOptions": [{ "optionId": "opt_001", "minLevel": 1 }, { "optionId": "opt_001", "minLevel": 1 }, { "optionId": "opt_001", "minLevel": 1 }] }
+  ],
 
   "weapon": {
     "classWeapon": {
-      "statPriority": []
+      "weaponId": "ww_001",
+      "statPriority": ["공격", "방어", "생명"]
     },
-    "limitedWeapons": []
+    "limitedWeapons": [
+      { "weaponId": "lw_001", "statPriority": ["공격", "방어", "생명"] },
+      { "weaponId": "lw_002", "statPriority": ["공격", "방어", "생명"] }
+    ]
   },
 
-  "rune": [],
+  "runeColor": "green",
+  "rune": [
+    { "corePriority": ["원소에너지", "치명타피해"], "crystalPriority": ["공격", "방어관통"] },
+    { "corePriority": ["원소에너지", "치명타피해"], "crystalPriority": ["공격", "방어관통"] },
+    { "corePriority": ["원소에너지", "치명타피해"], "crystalPriority": ["공격", "방어관통"] },
+    { "corePriority": ["원소에너지", "치명타피해"], "crystalPriority": ["공격", "방어관통"] },
+    { "corePriority": ["원소에너지", "치명타피해"], "crystalPriority": ["공격", "방어관통"] },
+    { "corePriority": ["원소에너지", "치명타피해"], "crystalPriority": ["공격", "방어관통"] }
+  ],
 
   "skill": {
     "image": ""
