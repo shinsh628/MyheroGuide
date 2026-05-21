@@ -239,13 +239,23 @@ function renderCard(card) {
 
 function renderAstrology(astrology) {
   if (!astrology?.length) return emptyMsg();
-  return `<table class="item-tbl">${astrology.map((id, i) => {
+  const ROMAN = ['I', 'II', 'III'];
+  return `<div class="astro-list">${astrology.map((id, i) => {
     const a = byId(DB.astrology, id);
-    return `<tr>
-      <td class="tbl-img-cell">${thumb(a?.image)}<span class="tbl-slot-lbl">${i + 1}번</span></td>
-      <td class="tbl-body-cell"><div class="tbl-item-name">${a?.name ?? '???'}</div></td>
-    </tr>`;
-  }).join('')}</table>`;
+    const icon = a?.image
+      ? `<img class="astro-icon" src="${a.image}" alt="">`
+      : `<div class="astro-icon astro-icon-empty"></div>`;
+    return `<div class="astro-card">
+      <div class="astro-card-label">${ROMAN[i] ?? i + 1}</div>
+      <div class="astro-card-body">
+        ${icon}
+        <div class="astro-info">
+          <div class="astro-name">${a?.name ?? '???'}</div>
+          <div class="astro-desc">${a?.desc ?? ''}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('')}</div>`;
 }
 
 function renderSpell(spell) {

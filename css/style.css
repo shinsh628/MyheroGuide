@@ -758,6 +758,44 @@ body::after {
   border-radius: 6px;
 }
 
+/* ── Astrology ───────────────────────────────────── */
+.astro-list { display: flex; flex-direction: column; gap: 10px; padding: 12px 0; }
+.astro-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.astro-card-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--main);
+  font-family: 'Cinzel', serif;
+  padding: 5px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.astro-card-body {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px;
+}
+.astro-icon {
+  width: 165px;
+  height: 165px;
+  image-rendering: pixelated;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+.astro-icon-empty {
+  background: var(--bg-deep);
+  border: 1px dashed var(--border);
+  border-radius: 6px;
+}
+.astro-info { flex: 1; }
+.astro-name { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+.astro-desc { font-size: 11px; color: var(--text-sub); line-height: 1.6; }
+
 .img-only-empty {
   width: 100%;
   min-height: 180px;
